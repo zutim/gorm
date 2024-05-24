@@ -20,7 +20,7 @@ func NewDb(conf *Conf) *gorm.DB {
 		panic(err)
 	}
 
-	if err := instance.EnableConnectionPool(conf.MaxIdle, conf.MaxOpen, time.Duration(conf.MaxLifeTime)); err != nil {
+	if err := instance.EnableConnectionPool(conf.MaxIdle, conf.MaxOpen, time.Duration(conf.MaxLifeTime) * time.Second); err != nil {
 		panic(err)
 	}
 
