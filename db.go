@@ -1,8 +1,9 @@
 package db
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Conf struct {
@@ -10,6 +11,7 @@ type Conf struct {
 	MaxIdle     int
 	MaxOpen     int
 	MaxLifeTime int
+	MaxIdleTime int
 }
 
 func NewDb(conf *Conf) *gorm.DB {
@@ -20,7 +22,7 @@ func NewDb(conf *Conf) *gorm.DB {
 		panic(err)
 	}
 
-	if err := instance.EnableConnectionPool(conf.MaxIdle, conf.MaxOpen, time.Duration(conf.MaxLifeTime) * time.Second); err != nil {
+	if err := instance.EnableConnectionPool(conf.MaxIdle, conf.MaxOpen, time.Duration(conf.MaxLifeTime)*time.Second, time.Duration(conf.MaxIdleTime)*time.Second); err != nil {
 		panic(err)
 	}
 

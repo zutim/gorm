@@ -1,10 +1,11 @@
 package db
 
 import (
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
-	"time"
 )
 
 type Instance struct {
@@ -39,7 +40,7 @@ func (instance *Instance) RegisterResolverConfig(config dbresolver.Config, table
 }
 
 // EnableConnectionPool enables connection pool
-func (instance *Instance) EnableConnectionPool(maxIdleConns int, maxOpenConns int, connMaxLifetime time.Duration) error {
+func (instance *Instance) EnableConnectionPool(maxIdleConns int, maxOpenConns int, connMaxLifetime time.Duration, maxIdleTime time.Duration) error {
 	db, err := instance.DB.DB()
 	if err != nil {
 		return err
@@ -52,5 +53,8 @@ func (instance *Instance) EnableConnectionPool(maxIdleConns int, maxOpenConns in
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	db.SetConnMaxLifetime(connMaxLifetime)
+
+	db.SetConnMaxIdleTime(maxIdleTime)
+
 	return nil
 }
